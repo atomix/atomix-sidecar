@@ -18,6 +18,8 @@ spec:
           args:
             - -tlsCertFile=/etc/webhook/certs/cert.pem
             - -tlsKeyFile=/etc/webhook/certs/key.pem
+            - -config=/etc/webhook/config/atomix.conf
+            - 2>&1
           volumeMounts:
             - name: webhook-certs
               mountPath: /etc/webhook/certs
