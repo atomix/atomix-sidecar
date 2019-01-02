@@ -9,7 +9,7 @@ spec:
   template:
     metadata:
       labels:
-        atomix-sidecar-injector
+        app: atomix-sidecar-injector
     spec:
       containers:
         - name: atomix-sidecar-injector

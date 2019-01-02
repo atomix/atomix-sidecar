@@ -41,6 +41,7 @@ var (
 )
 
 const (
+	admissionWebhookEnabledAnnotation = "sidecar-injector.atomix.io/enabled"
 	admissionWebhookStatusAnnotation  = "sidecar-injector.atomix.io/status"
 	admissionWebhookClusterAnnotation = "sidecar-injector.atomix.io/cluster"
 	admissionWebhookVersionAnnotation = "sidecar-injector.atomix.io/version"
@@ -151,6 +152,13 @@ func (wh *WebhookServer) inject(ar *v1beta1.AdmissionReview) *v1beta1.AdmissionR
 	annotations := pod.ObjectMeta.GetAnnotations()
 	if annotations == nil {
 		annotations = map[string]string{}
+	}
+
+	enabled := annotations[admissionWebhookEnabledAnnotation]
+	if strings.ToLower(enabled) != "true" {
+		return &v1beta1.AdmissionResponse{
+			Allowed: true,
+		}
 	}
 
 	status := annotations[admissionWebhookStatusAnnotation]
