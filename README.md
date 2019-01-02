@@ -1,4 +1,4 @@
-# Atomix Sidecar Ijector
+# Atomix Sidecar Injector
 Mutating webhook for injecting Atomix sidecar containers into Kubernetes pods.
 
 ## Building the project
