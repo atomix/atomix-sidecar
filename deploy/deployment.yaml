@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: atomix-sidecar-injector-deployment
+  labels:
+    app: atomix-sidecar-injector
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        atomix-sidecar-injector
+    spec:
+      containers:
+        - name: atomix-sidecar-injector
+          image: atomix/atomix-sidecar-injector:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - -tlsCertFile=/etc/webhook/certs/cert.pem
+            - -tlsKeyFile=/etc/webhook/certs/key.pem
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+            - name: webhook-config
+              mountPath: /etc/webhook/config
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: atomix-sidecar-injector-certs
+        - name: webhook-config
+          configMap:
+            name: atomix-sidecar-injector-configmap

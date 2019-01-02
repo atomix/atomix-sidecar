@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: atomix-sidecar-injector-example
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar-injector.atomix.io/cluster: example-atomixcluster
+      labels:
+        app: atomix-sidecar-injector-example
+    spec:
+      containers:
+        - name: sleep
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sleep
+            - infinity

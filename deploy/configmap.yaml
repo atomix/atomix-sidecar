@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: atomix-sidecar-injector-configmap
+data:
+  atomix.conf: |
+    cluster {
+      discovery {
+        type: dns
+        service: ${atomix.service}
+      }
+    }

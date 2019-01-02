@@ -1,0 +1,22 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: atomix-sidecar-injector-webhook-cfg
+  labels:
+    app: atomix-sidecar-injector
+webhooks:
+  - name: sidecar-injector.atomix.io
+    clientConfig:
+      service:
+        name: atomix-sidecar-injector-svc
+        namespace: default
+        path: "/mutate"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchLabels:
+        sidecar-injector: enabled
