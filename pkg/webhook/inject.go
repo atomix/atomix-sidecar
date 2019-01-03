@@ -65,7 +65,7 @@ func newConfigContainer(spec AgentSpec) corev1.Container {
 		Command: []string{
 			"sh",
 			"-c",
-			"echo \"" + newConfigOutput(spec) + "\" > /config/atomix.properties",
+			"echo '" + newConfigOutput(spec) + "' > /config/atomix.conf",
 		},
 		VolumeMounts: []corev1.VolumeMount{
 			{
@@ -78,7 +78,7 @@ func newConfigContainer(spec AgentSpec) corev1.Container {
 
 func newConfigOutput(spec AgentSpec) string {
 	var lines []string
-	lines = append(lines, fmt.Sprintf("atomix.service=%s.%s.svc.cluster.local", spec.cluster, spec.namespace))
+	lines = append(lines, fmt.Sprintf("atomix.service=\"%s.%s.svc.cluster.local\"", spec.cluster, spec.namespace))
 	lines = append(lines, spec.config)
 	return strings.Join(lines, "\n")
 }
@@ -106,7 +106,7 @@ func newAgentContainer(spec AgentSpec) corev1.Container {
 		},
 		Args: []string{
 			"--config",
-			"/etc/atomix/atomix.properties",
+			"/etc/atomix/atomix.conf",
 			"--log-level=INFO",
 			"--file-log-level=OFF",
 			"--console-log-level=INFO",

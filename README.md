@@ -65,13 +65,13 @@ added to the Kubernetes cluster. The webhook configuration supplied in
 running the `patch-ca-bundle.sh` script:
 
 ```bash
-./deploy/patch-ca-bundle.sh
+cat ./deploy/mutatingwebhook.yaml | tee ./deploy/mutatingwebhook-ca-bundle.yaml | ./deploy/patch-ca-bundle.sh > ./deploy/mutatingwebhook-ca-bundle.yaml
 ```
 
 Once the manifest has been updated, create the `MutatingWebhookConfiguration`:
 
 ```bash
-kubectl create -f deploy/mutatingwebhook.yaml
+kubectl create -f deploy/mutatingwebhook-ca-bundle.yaml
 ```
 
 ### Test the sidecar injector

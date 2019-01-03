@@ -14,7 +14,7 @@ spec:
       containers:
         - name: atomix-sidecar-injector
           image: atomix/atomix-sidecar-injector:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
             - -tlsCertFile=/etc/webhook/certs/cert.pem
             - -tlsKeyFile=/etc/webhook/certs/key.pem
