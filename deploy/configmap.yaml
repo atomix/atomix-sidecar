@@ -5,6 +5,7 @@ metadata:
 data:
   atomix.conf: |
     cluster {
+      node: ${atomix.node}
       discovery {
         type: dns
         service: ${atomix.service}

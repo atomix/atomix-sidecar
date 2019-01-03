@@ -43,6 +43,7 @@ var (
 const (
 	admissionWebhookEnabledAnnotation = "sidecar-injector.atomix.io/enabled"
 	admissionWebhookStatusAnnotation  = "sidecar-injector.atomix.io/status"
+	admissionWebhookServiceAnnotation = "sidecar-injector.atomix.io/service"
 	admissionWebhookClusterAnnotation = "sidecar-injector.atomix.io/cluster"
 	admissionWebhookVersionAnnotation = "sidecar-injector.atomix.io/version"
 	injected                          = "injected"
@@ -169,11 +170,14 @@ func (wh *WebhookServer) inject(ar *v1beta1.AdmissionReview) *v1beta1.AdmissionR
 	}
 
 	cluster := annotations[admissionWebhookClusterAnnotation]
-	if cluster == "" {
+	service := annotations[admissionWebhookServiceAnnotation]
+	if cluster == "" && service == "" {
 		glog.Infof("Skipping %s/%s due to missing cluster annotation", pod.ObjectMeta.Namespace, podName)
 		return &v1beta1.AdmissionResponse{
 			Allowed: true,
 		}
+	} else if service == "" {
+		service = fmt.Sprintf("%s-service", cluster)
 	}
 
 	version := annotations[admissionWebhookVersionAnnotation]
@@ -188,7 +192,7 @@ func (wh *WebhookServer) inject(ar *v1beta1.AdmissionReview) *v1beta1.AdmissionR
 		name:      podName,
 		namespace: req.Namespace,
 		config:    wh.config,
-		cluster:   cluster,
+		service:   service,
 		version:   version,
 	}
 

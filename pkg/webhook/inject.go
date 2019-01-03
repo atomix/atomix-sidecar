@@ -27,7 +27,7 @@ type AgentSpec struct {
 	name      string
 	namespace string
 	config    string
-	cluster   string
+	service   string
 	version   string
 }
 
@@ -65,7 +65,7 @@ func newConfigContainer(spec AgentSpec) corev1.Container {
 		Command: []string{
 			"sh",
 			"-c",
-			"echo '" + newConfigOutput(spec) + "' > /config/atomix.conf",
+			"echo \"" + newConfigOutput(spec) + "\" > /config/atomix.conf",
 		},
 		VolumeMounts: []corev1.VolumeMount{
 			{
@@ -78,8 +78,10 @@ func newConfigContainer(spec AgentSpec) corev1.Container {
 
 func newConfigOutput(spec AgentSpec) string {
 	var lines []string
-	lines = append(lines, fmt.Sprintf("atomix.service=\"%s.%s.svc.cluster.local\"", spec.cluster, spec.namespace))
-	lines = append(lines, spec.config)
+	lines = append(lines, fmt.Sprintf("atomix.node.id=$(hostname -s)"))
+	lines = append(lines, fmt.Sprintf("atomix.node.host=$(hostname -s)"))
+	lines = append(lines, fmt.Sprintf("atomix.service=\"%s.%s.svc.cluster.local\"", spec.service, spec.namespace))
+	lines = append(lines, strings.Replace(spec.config, "$", "\\$", -1))
 	return strings.Join(lines, "\n")
 }
 
