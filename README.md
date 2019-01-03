@@ -3,10 +3,18 @@ Mutating webhook for injecting [Atomix](https://atomix.io) agent sidecar contain
 into Kubernetes pods.
 
 ## Building the project
-* `dep ensure -v`
-* `go build -a -o atomix-sidecar-injector cmd/webhook/main.go`
-* `docker build --no-cache -t atomix/atomix-sidecar-injector:latest .`
-* `docker push atomix/atomix-sidecar-injector:latest`
+To build the project, simply run `make`:
+
+```bash
+make
+```
+
+`make` will build the sidecar injector image locally. To push the image to the
+upstream repository, run `make push`:
+
+```bash
+make push
+```
 
 ## Deploying the Webhook
 
